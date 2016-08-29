@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>canvas的学习</title>
+    <style>
+        #canvas1{
+		   /*margin:100px;*/
+           border:1px solid pink;
+        }
+		#canvas2{
+		   border:1px solid lime;
+		}
+    </style>
+</head>
+
+<body>
+
+
+    canvas设置大小不能用css样式设置的，css设置的大小是体现一个标签在网页里面占据的空间而已
+    canvas有自己的内部像素的，默认是宽200像素，高是150px;
+    canvas的大小是由canvas的属性来决定的，而且，不用带单位
+    canvas里面是不能放内容的，所有的内容只能画出来
+    
+  <canvas id="canvas1" >你的浏览器不支持html5</canvas>
+  <canvas id="canvas2" width="200" height="200"></canvas>
+  
+  canvas的绘制，自身是没有绘制能力的，所有的绘制都必须在JS内部完成
+  
+  <script type="text/javascript">
+      //1、得到canvas对象
+	  var canvas1=document.getElementById("canvas1");
+	  var canvas2=document.getElementById("canvas2");
+	  
+	  //设置大小，而且不要加高度
+	  canvas1.width=200;
+	  canvas1.height=200;
+	  
+	  //2、获得绘制对象 俗称上下文  绘制的是2d的图形
+	  var context1=canvas1.getContext("2d");
+	  var context2=canvas2.getContext("2d");
+	  
+	  //3、开始绘制
+	  //fill()：填充
+	  //fillStyle="";    填充的颜色
+	  //fillRect(x,y,width,height);
+	  context1.fillStyle="red";
+	  context1.fillRect(0,0,200,200);
+	  context1.fill();
+	  
+	  context2.fillStyle="pink";
+	  context2.fillRect(0,0,200,200);
+	  context2.fill();
+	  
+  </script>
+
+</body>
+</html>

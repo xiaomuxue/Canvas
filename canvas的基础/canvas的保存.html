@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>canvas的保存</title>
+</head>
+
+<body>
+   <canvas id="canvas" width="400" height="300">您的浏览器不支持画布</canvas>
+   
+   <script type="text/javascript">
+      var canvas=document.getElementById("canvas");
+	  var context=canvas.getContext("2d");
+	  
+	  context.fillStyle="red";
+	  context.save();    //保存
+	  context.fillStyle="lime";
+	  context.fillRect(0,0,100,100);
+	  context.restore();   //如果有属性存在save 和restore 之间，那么这个属性只有存在在这一个区间
+	  context.fillRect(0,120,100,100);
+	  
+   </script>
+   
+</body>
+</html>

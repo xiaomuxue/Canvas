@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>canvas渐变</title>
+</head>
+
+<body>
+   <canvas id="canvas" width="600" height="600">您的浏览器不支持该功能！</canvas>
+   
+   <script type="text/javascript">
+        var canvas=document.getElementById("canvas");
+		var context=canvas.getContext("2d");
+		
+		//渐变     background-image
+		//分两种    
+		//1、线性    径向                   （100，120，[表示开始的位置]，400，400[表示结束的位置]）
+		var grd=context.createLinearGradient(100,120,400,400);
+		//定义颜色   addColorStop   0-1   0：刚开始     1：结束      颜色
+		grd.addColorStop(0,"red");
+		grd.addColorStop(0.2,"yellow");
+		grd.addColorStop(0.6,"lime");
+		grd.addColorStop(1,"blue");
+		context.fillStyle=grd;
+		/*context.fillRect(100,120,200,200);*/
+		
+		
+		context.font="98px 华文行楷";
+		/*context.fillText("源辰24班",100,120);*/        //填充的彩色字体
+		
+		context.strokeStyle=grd;
+		context.strokeText("源辰24班",100,120);             //边框的彩色字体
+		
+   </script>
+</body>
+</html>

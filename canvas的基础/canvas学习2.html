@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>canvas学习-2</title>
+    <style>
+        #canvas1{
+		   /*margin:100px;*/
+           border:1px solid pink;
+        }
+		#canvas2{
+		   border:1px solid lime;
+		}
+    </style>
+</head>
+
+<body>
+   <canvas id="canvas1" width="300" height="300">你的浏览器不支持html5</canvas>
+   <canvas id="canvas2" width="300" height="300">你的浏览器不支持html5</canvas>
+   
+   <script type="text/javascript">
+      //1、得到canvas对象
+	  var canvas1=document.getElementById("canvas1");
+	  var canvas2=document.getElementById("canvas2");
+	  
+	  //2、获得绘制对象 俗称上下文  绘制的是2d的图形
+	  var context1=canvas1.getContext("2d");
+	  var context2=canvas2.getContext("2d");
+	  
+	  //填充
+	  context1.fillStyle="rgba(244,8,9,0.7)";
+	  context1.fillRect(50,50,200,200);
+	  context1.stroke();
+	  
+	  //画边框
+	  context1.strokeStyle="rgba(78,33,119,0.7)";
+	  context1.strokeRect(50,50,200,200);
+	  context1.stroke();
+	  
+	  context2.strokeStyle="rgba(78,33,119,0.7)";
+	  context2.strokeRect(50,50,200,200);
+	  context2.stroke();
+	  
+	  //设置文字的大小，颜色，居中
+	  context2.font="58px 华文行楷";
+	  context2.fillStyle="rgba(78,33,119,0.7)";
+	  //fillText(txt,x,y);    txt:文本    x:相对于画布据x的距离   y:相对于画布据y的距离
+	  context2.fillText("落叶",100,100);
+	  
+	  context2.font="58px 华文行楷";
+	  context2.strokeStyle="rgba(78,33,119,0.7)";
+	  //fillText(txt,x,y);    txt:文本    x:相对于画布据x的距离   y:相对于画布据y的距离
+	  context2.strokeText("落叶",100,200);
+	  
+	  
+   </script>
+</body>
+</html>
