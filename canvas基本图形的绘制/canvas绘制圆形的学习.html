@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>canvas绘制圆形的学习</title>
+</head>
+
+<body>
+   <canvas id="canvas" width="600" height="600">您的浏览器不支持html5</canvas>
+   
+   <script>
+       //1、得到canvas对象
+	   var canvas=document.getElementById("canvas");
+	   
+	   //2、获得绘制对象 俗称上下文  绘制的是2d的图形
+	   var context=canvas.getContext("2d");
+	   
+	 /*  画弧形  context.arc(x,y,radius,startAngle,endAngle,antiClockwise);
+	   x,y   圆心坐标
+	   radius  半径
+	   startAngle,endAngle     开始的位置和结束的位置
+	   antiClockwise    true/false      true:表示逆时针绘制弧形    false :表示顺时针绘制弧形
+	   */
+	   
+	   context.arc(200,200,150,0,360*Math.PI/180,false);
+	   context.fillStyle="pink";
+	   context.fill();
+	   context.strokeStyle="red";
+	   context.stroke();
+	   
+   </script>
+</body>
+</html>

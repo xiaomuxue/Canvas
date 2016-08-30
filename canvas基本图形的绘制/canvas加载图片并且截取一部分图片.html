@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>canvas加载图片并且截取一部分图片</title>
+</head>
+
+<body>
+   <canvas id="canvas" width="600" height="600">你的浏览器不支持该功能！</canvas>
+   
+   <script type="text/javascript">
+       var canvas=document.getElementById("canvas");
+	   var context=canvas.getContext("2d");
+	   
+	   //创建出一个img对象
+	   var newImg=new Image();
+	   newImg.src="美.jpg";
+	   
+	   newImg.onload=function(){
+	       //画这个图片，从0，0这个点开始绘制
+		   context.drawImage(newImg,0,0);
+		   //从400， 400 开始画图片，图片的宽高是100*100
+		   context.drawImage(newImg,400,400,100,100);
+		   //截取    截取一部分，来显示     90，80    截取100，100    放到600，600来显示，大小200，200
+		   context.drawImage(newImg,70,90,100,100,300,300,100,100);
+	   }
+   </script>
+</body>
+</html>

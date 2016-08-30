@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>canvas线条的绘制</title>
+</head>
+
+<body>
+   <canvas id="canvas" width="400" height="300">您的浏览器不支持画布</canvas>
+   
+   <script type="text/javascript">
+       var canvas=document.getElementById("canvas");
+	   var context=canvas.getContext("2d");
+	   
+	   context.beginPath();       //开始绘制和结束绘制最好一起使用，     若是只使用beginPath，那么前面的图形起始位置会跟着后面的改变
+	   //moveTo  起始点            lineTo  结束点
+	   context.moveTo(20,20);
+	   context.lineTo(120,20);
+	   context.lineTo(20,120);
+	   
+	   context.closePath();
+	   context.stroke();     //图形绘制
+	   
+	   context.beginPath();      //定义绘制的路径
+	   
+	   context.moveTo(140,220);
+	   context.lineTo(220,200);
+	   context.lineTo(260,120);
+	   
+	   context.closePath();
+	   
+	   context.strokeStyle="red";
+	   context.stroke();
+	   
+	   
+	    
+   </script>
+   
+</body>
+</html>
