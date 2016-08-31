@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>canvas小练习（正方形和圆）</title>
+</head>
+
+<body>
+   <!--<canvas id="canvas1" width="200" height="200"></canvas>
+   <canvas id="canvas2" width="200" height="200"></canvas>
+   <script type="text/javascript">
+       var canvas=document.getElementById("canvas1");
+	   var context=canvas.getContext("2d");
+	   
+	   context.fillStyle="orange"
+	   context.fillRect(0,0,200,200);
+	   context.fill();
+	   
+	   var canvas1=document.getElementById("canvas2");
+	   var context1=canvas1.getContext("2d");
+	   
+	   context1.arc(100,100,100,360*Math.PI/180,false);
+	   context1.fillStyle="orange";
+	   context1.fill();
+	   
+   </script>-->
+   
+     <!-- 查阅图形结合 -->
+   <canvas id="canvas" width="400" height="300">您的浏览器不支持该功能</canvas>
+   
+   <script type="text/javascript">
+      var canvas=document.getElementById("canvas");
+	  var context=canvas.getContext("2d");
+	  //创建绘制路径
+	  context.arc(150,100,50,0,Math.PI*2,true);      //圆形路径
+	  context.rect(50,50,100,100);       //矩形路径
+	  
+	  //设置样式
+	  context.strokeStyle="#000";    //设置边框颜色
+	  context.lineWidth=3;           //设置边框宽度
+	  context.fillStyle="#f90";      //设置填充颜色
+	  
+	  //填充矩形形状
+	  context.stroke();       //绘制边框
+	  context.fill();         //填充区域
+	  
+   </script>
+   
+   
+   
+</body>
+</html>
