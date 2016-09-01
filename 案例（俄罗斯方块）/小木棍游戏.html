@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>小木棍游戏</title>
+<style>
+   #wrap{
+       width:300px;
+	   height:500px;
+	   border:1px solid #000;
+	   margin:70px auto;
+	   overflow:hidden;
+   }
+   #gameContent{
+       width:600px;
+	   height:500px;
+	   background:yellow;
+	   background-size:300px 500px;
+	   position:relative;
+	   left:0px;	   
+	}
+	#hero{
+	   width:40px;
+	   height:40px;
+	   background:red;
+	   position:absolute;
+	   left:0px;
+	   bottom:200px;
+	}
+	#leftdiv{
+	    width:80px;
+		height:200px;
+		background:black;
+		position:absolute;
+		bottom:0px;
+	}
+	#middlediv{
+	    width:80px;
+		height:200px;
+		background:black;
+		position:absolute;
+		bottom:0px;
+		left:200px;
+	}
+	#rightdiv{
+	    width:80px;
+		height:200px;
+		background:black;
+		position:absolute;
+		left:400px;
+		bottom:0;
+	}
+	#stick{
+	    width:0px;
+		height:6px;
+		background:green;
+		position:absolute;
+		left:40px;
+		bottom:200px;
+		transform:rotate(-90deg);
+		transform-origin:0 6px;
+	}
+	#grade{
+	    width:100px;
+		font-size:40px;
+		margin:0 auto;
+	}
+</style>
+</head>
+
+<body>
+    <p id="grade">0</p>
+    <div id="wrap">
+        <div id="gameContent">
+             <div id="leftdiv"></div>
+             <div id="middlediv"></div>
+             <div id="rightdiv"></div>
+             <div id="hero"></div>
+             <div id="stick"></div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+	//定时器
+        var timer=null;
+		//定义一个变量，用来判断你还能不能够移动
+		var onoff=true;
+		var temp=0;    //定义一个临时变量
+		
+		//长度
+		var num=0;
+		
+		//获取要移动的元素
+		var stick=document.getElementById("stick");
+		var hero=document.getElementById("hero");
+		var gameContent=document.getElementById("gameContent");
+		var middlediv=document.getElementById("middlediv");
+		var rightdiv=document.getElementById("rightdiv");
+		
+		var grade=document.getElementById("grade");
+		
+		//随机middlediv的大小
+		middlediv.style.width=createNum(40,80)+"px";
+		middlediv.style.left=createNum(80,220)+"px";
+		
+		//按下，棍子变长
+		document.onmousedown=function(){
+		   timer=setInterval(function(){
+		       num+=2;
+			   stick.style.width=num+"px";
+		   },20);
+		}
+		
+		//松开，棍子就应该移动
+		document.onmouseup=function(){
+		   //清除定时器
+		   clearInterval(timer);
+		   
+		   //得到据左的距离
+		   middleLeft=middlediv.offsetLeft;
+		   next=createNext();
+		   
+		   rightdiv.style.width=next[0]+"px";
+		   rightdiv.style.left=next[1]+"px";
+		   
+		   //棍子移动下去
+		   stick.style.transition="0.5s";
+		   stick.style.transform="rotate(0deg)";
+		   
+		   //游戏失败的判定
+		   if(num<middlediv.offsetLeft-40 || num>middlediv.offsetLeft+middlediv.offsetWidth-40){
+		        onoff=false;
+		   }
+		}
+		
+		//游戏继续进行，这个主角应该要移动过去
+		//什么时候移动？？？当棍子的 transition完成的时候
+		stick.addEventListener("transitionend",function(){
+		     if(onoff){
+		         hero.style.transition="1s";
+				 hero.style.left=middlediv.offsetLeft+"px";
+			 }else{
+		         alert("游戏失败");
+			 }
+		});
+		
+		//主角移动之后，游戏屏幕就是滚动
+		hero.addEventListener("transitionend",function(event){
+		    //游戏屏幕滚动
+			gameContent.style.transition="1s";
+			gameContent.style.left=-middlediv.offsetLeft+"px";
+			temp=1;
+			event.stopPropagation();     //阻止事件冒泡
+			grade.innerHTML=parseInt(grade.innerHTML)+(100-middlediv.offsetWidth);
+		});
+		
+		//屏幕移动之后，把棍子给消失掉，新生成一个div
+		gameContent.addEventListener("transitionend",function(){
+			 if(temp==1){
+			   //还原屏幕
+			   gameContent.style.transition="none";
+			   gameContent.style.left=0;
+			   hero.style.transition="none";
+			   hero.style.left=0;
+			   stick.style.transition="none";
+			   stick.style.width=0;
+			   stick.style.transform="rotate(-90deg)";
+			   
+			   //移动之后，主角的所站的div要改成中间那个
+			   leftdiv.style.width=middlediv.offsetWidth+"px";
+			   
+			   middlediv.style.width=next[0]+"px";
+			   middlediv.style.left=next[1]-middleLeft+"px";
+			   
+			   num=0;
+			   temp=0;
+			 }
+		});
+		
+		function createNum(start,end){
+		     return parseInt( Math.random()*(end-start)+start );
+		}
+		
+		function createNext(){
+		    var iWidth=createNum(40,80);
+			var iLeft=createNum(300,220+middleLeft);
+			return [iWidth,iLeft];
+		}
+		
+    </script>
+    
+</body>
+</html>
