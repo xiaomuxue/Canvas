@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>俄罗斯方块</title>
+<style>
+    body{
+	   background:url(2.jpg) repeat;
+	}
+    #canvas{
+	    background-color:#fff;
+		position:absolute;
+		top:0px;
+		left:0px;
+		right:0px;
+		bottom:0px;
+		margin:auto;
+		/*opacity:0.7;*/
+	}
+</style>
+</head>
+
+<body>
+   <canvas width="500" height="500" id="canvas"></canvas>
+   
+   <script type="text/javascript">
+       var canvas=document.getElementById("canvas");
+	   //获取绘制对象
+	   var Context=canvas.getContext("2d");
+	    //创建数据
+	   var data=map(12,12);
+	   
+	   var y=0;      //指方块向下移动的次数
+	   var x=4;
+	   
+	   var matrix=mold();       //移动的方块肯定就是当前生成的方块
+	   //画面板
+	   render(data,Context);
+	   
+	   
+	   setInterval(function(){
+		   fall();
+	   },400);
+	   
+	   create(matrix);
+	  
+	   
+	   //方块变形
+	   function rotate(){
+		   var arr=[];
+		   //行和列互换
+		   var y=matrix.length;
+		   var x=matrix[0].length;
+		   for(var i=0;i<x;i++){
+		      arr.push([]);
+		   }
+		   //调换数据
+		   for(var i=0;i<y;i++){
+		      for(var j=0;j<x;j++){
+			     arr[j][y-1-i]=matrix[i][j];
+			  }
+		   }
+		   //互换完毕
+		   matrix=arr;
+		}
+	   
+	   //制作快捷键
+	   function play(){
+	      document.onkeydown=function(event){
+			  alert("aa");
+		      switch( event.keyCode ){
+			      case 37:    //往左移动
+				       clearPre(matrix);
+					   x--;
+					   if(x<0){
+					      x=0;
+					   }
+					   create(matrix);
+					   break;
+			      case 39:     //向右移动
+				       clearPre(matrix);
+					   x++;
+					   if(x+matrix[0].length>=data[0].length){
+					      x=data[0].length-matrix[0].length;
+					   }
+					   create(matrix);
+					   break;
+				  case 38:    //向上变形
+				        clearPre(matrix);
+						rotate(matrix);
+						create(matrix);
+						break;
+				   case 40:
+				        break;
+			  }
+		  }
+	   }
+	   
+	    play();
+	   
+	   //移动
+	   function fall(){
+	      //判断当前这个小方块，如果移动到了最底部就定下，并且要重新生成一个小方块
+		  if( touchTest() ){
+	          y=0;
+			  x=4;
+			  matrix=mold();
+		  }
+		  //并且清除上一行的数据
+		  clearPre(matrix);
+		  //如果没有，则向下移动
+		  y++;
+		  create(matrix);
+	   }
+	   
+	   //除了检测到达底部之外，还要检测是否与其它的方块碰撞
+	   function touchTest(){
+	       var len=matrix.length;
+		   if(y+len>=data.length){
+		       return true;
+		   }
+		   for( var i=len-1;i<len;i++){
+		      for(var j=0;j<matrix[i].length;j++){
+			      //如果它下面的数据为1，那么就说明下面有方块，直接返回true
+				  if( matrix[i][j] && data[i+y+1][j+x]==1 ){
+				      return true;
+				  }
+			  }
+		   }
+		   return false;
+	   }
+	   
+	   //清除
+	   function clearPre(arr){
+	       for(var i=0;i<arr.length;i++){
+		       for(var j=0;j<arr[i].length;j++){
+			       data[i+y][j+x]=0;
+			   }
+		   }
+	   }
+	   
+	   //画出来，小方块
+	   function create(arr){
+		   for(var i=0;i<arr.length;i++){
+		       for(var j=0;j<arr[i].length;j++){
+				   if(!data[i+y][j+x]){
+			          data[i+y][j+x]=arr[i][j];
+				   }
+			   }
+		   }
+		   render(data,Context);
+	   }
+	   
+	   
+	   //开始绘制面板
+	   function render(data,Context){
+	       //为什么要减10   10的间隙
+		   var w=500/12-10;
+		   var h=w;
+		   
+		   var rLen=data.length;
+		   var cLen=data[0].length;
+		   for(var i=0;i<rLen;i++){
+		       for(var j=0;j<cLen;j++){
+			       //开始画小格子
+				   Context.fillStyle= data[i][j]==0 ? "red": "yellow";       //格子的颜色
+				   Context.fillRect(j*(w+10)+5,i*(h+10)+5,w,h);
+			   }
+		   }
+	   }
+	   
+	   //生成小方块
+	   function mold(){
+	       var num=Math.floor( Math.random()*7 );
+		   var arr=[
+		       [[1,1,1,1]],
+			   [[1,1],[1,1]],
+			   [[1,1,0],[0,1,1]],
+			   [[1,0,0],[1,1,1]],
+			   [[0,1,1],[1,1,0]],
+			   [[0,1,0],[1,1,1]],
+			   [[0,0,1],[1,1,1]]
+		   ];
+		   //随机生成一个方块
+		   return arr[num];
+	   }
+	   
+	   
+	   //给地图定义数据
+	   //如果小格子的数据为0  则代表没有   如果为1，则代表方块
+	   
+	  //创建数据
+	   function map(r,c){
+	       var data=[];
+		   for(var i=0;i<r;i++){
+		      data.push([]);
+			  //地图最开始的时候应该是空白的，没有方块，所以所有的数据都应该是0
+			  for(var j=0;j<c;j++){
+			      data[i].push(0);
+			  }
+		   }
+		   return data;
+	   }
+   </script>
+</body>
+</html>

@@ -1,0 +1,791 @@
+ canvas插入图片：
+  -- 等图加载完，再执行canvas操作
+
+                 -- 图片预加载：onload 中方法调用
+   -- drawImage(oing,x,y,w,h)
+        --oing :当前图片对象
+         --,x,y:当前图片的坐标
+         --w,h:当前图片的宽度
+示例：
+
+<script>
+
+window.onload=function(){
+
+varoc=document.getElementById('c');
+
+varocg=oc.getContext('2d');
+
+varyImg=newImage();
+
+yImg.onload=function(){
+
+draw(this)
+
+}
+
+yImg.src='img/2.JPG'
+
+functiondraw(obj){
+
+ocg.drawImage(yImg,50,50,300,300)
+
+}
+
+}
+
+</script>
+
+
+ canvas设置背景
+createPattern(oimg,平铺方式)
+      -- oimg -- 图片
+      --  平铺方式：
+             -- repeat    平铺
+             -- repeat-x   X轴平铺
+             -- repeat -y   Y轴平铺
+             --no-repeat     不平铺
+渐变
+线型渐变-- createLinearGradient(x1,y1,x2,y2)
+           -- x1/y1  起点坐标
+             -- x2/y2  终点坐标
+      .addColorStop(0,'red')     起始点颜色
+      .addColorStop(1,'blue');    终点颜色
+  PS:  起始点和终点之间可以再某个点添加别的颜色 
+示例：
+
+<script>
+
+window.onload=function(){
+
+varoc=document.getElementById('c1');
+
+varocg=oc.getContext('2d');
+
+varobj=ocg.createLinearGradient(150,100,250,200);
+
+obj.addColorStop(0,'red');
+
+obj.addColorStop(0.5,'yellow');
+
+obj.addColorStop(1,'blue');
+
+ocg.fillStyle=obj;
+
+ocg.fillRect(150,100,100,100);
+
+}
+
+</script>
+
+
+放射性渐变--createRadialGradient(x1,y1,r1,x2,y2,r2)
+         -- x1,y1,r1   第一个圆的坐标和半径
+         -- x2,y2,r2  第二个圆的坐标和半径
+
+<script>
+
+window.onload=function(){
+
+var oc=document.getElementById('c1');
+
+var ocg=oc.getContext('2d');
+
+varobj=ocg.createRadialGradient(100,100,50,100,100,120);
+
+obj.addColorStop(0,'red');
+
+obj.addColorStop(0.1,'yellow');
+
+obj.addColorStop(0.2,'orange');
+
+obj.addColorStop(0.3,'green');
+
+obj.addColorStop(0.4,'purple');
+
+obj.addColorStop(0.5,'pink');
+
+obj.addColorStop(0.6,'beige');
+
+obj.addColorStop(1,'blue');
+
+ocg.fillStyle=obj;
+
+ocg.fillRect(0,0,oc.width,oc.height);
+
+}
+
+</script>
+
+
+添加文本          
+  -- strokeText('文字'，x,y)      //  文字边框
+         -- 文字  -->要输入的文字
+         --x,y -->文字的坐标  不是以文字的左上角为基准点的，要设置基准点
+设置文字位置的基准点方法：
+     -- textAlign   //竖直方向    默认是left 值:left  center right 
+     -- textBaseline   //横向方向    默认是top 值:top  middle  bottom 
+  -- fillText(文字，x,y)      //  文字填充
+
+  -- font     //  文字大小：；‘60px  impact’  -->大小  ，样式   两个参数都要写
+
+window.onload=function(){
+
+var oc=document.getElementById('c1');
+
+var ocg=oc.getContext('2d');
+
+ocg.font='60px impact';
+
+ocg.textBaseline="top"
+
+ocg.strokeText('你好',0,0)
+
+ocg.fillText('你好',50,50)
+
+}
+文字下的方法
+   -- measureText(‘文字’) -->获取文字的属性 ，只能获取宽度width，不能获取高度，文字的高度就是文字的大小 示例：
+
+   var w=画布.measureText('你好').width;  
+
+使文字在画布中居中的示例：
+
+window.onload=function(){
+
+var oc=document.getElementById('c1');
+
+var ocg=oc.getContext('2d');
+
+ocg.font='60px impact';
+
+ocg.textBaseline="top"
+
+var w=ocg.measureText('你好').width;
+
+ocg.fillText('你好',(oc.width-w)/2,(oc.height-60)/2)；
+
+}
+文字阴影
+   -- shadowOffsetX / shadowOffsetY   
+           X轴偏移  ，Y轴偏移  值：数字
+   -- shadowBlur    高斯模糊值  值：数字
+  -- shadowColor    阴影颜色
+
+window.onload=function(){
+
+var oc=document.getElementById('c1');
+
+var ocg=oc.getContext('2d');
+
+ocg.font='60px impact';
+
+ocg.textBaseline="top";
+
+ocg.shadowOffsetY=20;
+
+ocg.shadowOffsetX=20;
+
+ocg.shadowBlur=6;
+
+ocg.shadowColor='blue'
+
+var w=ocg.measureText('你好嘛').width;
+
+ocg.fillText('你好123',(oc.width-w)/2,(oc.height-60)/2)
+
+}
+
+
+
+
+像素操作
+  -- getImageData(x,y,w,h)   // 获取图像数据 参数为坐标和宽高
+      下面的属性：
+      -- width  获取到对象的一行的像素个数
+      -- height  获取到对象的一列的像素个数
+      -- data  获取到对象所有像素的颜色值的数组集合（是像素总个数的4倍，因为一个像素里面有4个颜色值（RGBA））
+                                 每个值在 0~255 之间
+window.onload=function(){
+			var oc=document.getElementById('c1');
+			var ocg=oc.getContext('2d');
+            ocg.fillRect(0,0,100,100);
+           var Img=ocg.getImageData(0,0,100,100)
+               alert(Img.width); // 弹出一行的像素个数
+               alert(Img.height);  // 弹出一列的像素个数
+               alert(Img.data.length);  // 弹出总像素个数颜色数组集合的长度
+               alert(Img.data[0]);  // 弹出像素中的 R 的值
+               alert(Img.data[1]);  // 弹出像素中的 G 的值
+               alert(Img.data[2]);  // 弹出像素中的 B 的值
+               alert(Img.data[3]);  // 弹出像素中的 A 的值 透明值
+  }
+  -- putImageData( 获取图像，x,y)   // 设置新的图像数据
+window.onload=function(){
+			var oc=document.getElementById('c1');
+			var ocg=oc.getContext('2d');
+            ocg.fillRect(0,0,100,100);
+           var Img=ocg.getImageData(0,0,100,100)
+               for (var i = 0; i <Img.width*Img.height; i++) {
+               	  Img.data[4*i]=255
+               	  Img.data[4*i+1]=0
+               	  Img.data[4*i+2]=0
+               	  Img.data[4*i+3]=150
+               }
+             ocg.putImageData(Img,100,100)
+             ocg.putImageData(Img,150,150)
+  }
+
+
+绘制圆形：
+ arc(x,y,半径，起始弧，结束弧，旋转方向)
+   -- X,Y：圆心坐标；
+   --弧度与角度的关系：弧度=角度*Math.PI/180  -->PI 是大写
+   --旋转方向：顺时针（默认：false）,逆时针（true）
+    示例：
+
+<script>
+
+window.onload=function(){
+
+varoc=document.getElementById('c');
+
+varocg=oc.getContext('2d');
+
+ocg.arc(150,150,150,0,360*Math.PI/180,true);
+
+ocg.stroke();
+
+}
+
+</script>
+
+
+
+vanvas 绘制钟表：
+
+<!DOCTYPE html >
+
+<head>
+
+<title>canvas</title>
+
+<metacharset="UTF-8">
+
+<script>
+
+window.onload=function(){
+
+varoc=document.getElementById('c');
+
+varocg=oc.getContext('2d');
+
+functiontoDraw(){
+
+varX=200;
+
+varY=200;
+
+varr=150;
+
+ocg.clearRect(0,0,oc.width,oc.height)
+
+varoDate=newDate();
+
+varoHours=oDate.getHours();
+
+varoMin=oDate.getMinutes();
+
+varoSen=oDate.getSeconds();
+
+
+varOhoursValue=(-90+oHours*30+oMin/2)*Math.PI/180;
+
+varoMinValue=(-90+oMin*6)*Math.PI/180;
+
+varoSenValue=(-90+oSen*6)*Math.PI/180;
+
+
+ocg.beginPath();
+
+for(vari=0;i<60;i++){
+
+ocg.moveTo(X,Y);
+
+ocg.arc(X,Y,r,6*i*Math.PI/180,6*(i+1)*Math.PI/180,false)
+
+}
+
+ocg.closePath();
+
+ocg.stroke();
+
+
+ocg.fillStyle='white'
+
+ocg.beginPath();
+
+ocg.moveTo(X,Y);
+
+ocg.arc(X,Y,r*19/20,0,360*Math.PI/180,false)
+
+ocg.closePath();
+
+ocg.fill();
+
+
+ocg.lineWidth=3;
+
+ocg.beginPath();
+
+for(vari=0;i<12;i++){
+
+ocg.moveTo(X,Y);
+
+ocg.arc(X,Y,r,30*i*Math.PI/180,30*(i+1)*Math.PI/180,false)
+
+}
+
+ocg.closePath();
+
+ocg.stroke();
+
+
+ocg.fillStyle='white'
+
+ocg.beginPath();
+
+ocg.moveTo(X,Y);
+
+ocg.arc(X,Y,r*18/20,0,360*Math.PI/180,false)
+
+ocg.closePath();
+
+ocg.fill();
+
+
+ocg.lineWidth=5;
+
+ocg.beginPath();
+
+ocg.moveTo(X,Y);
+
+ocg.arc(X,Y,r*10/20,OhoursValue,OhoursValue,false)
+
+ocg.closePath();
+
+ocg.stroke();
+
+
+ocg.lineWidth=3;
+
+ocg.beginPath();
+
+ocg.moveTo(X,Y);
+
+ocg.arc(X,Y,r*14/20,oMinValue,oMinValue,false)
+
+ocg.closePath();
+
+ocg.stroke();
+
+
+ocg.save();
+
+ocg.lineWidth=1;
+
+ocg.strokeStyle='red'
+
+ocg.beginPath();
+
+ocg.moveTo(X,Y);
+
+ocg.arc(X,Y,r*19/20,oSenValue,oSenValue,false)
+
+ocg.closePath();
+
+ocg.stroke();
+
+ocg.restore();
+
+}
+
+setInterval(toDraw,1000)
+
+toDraw();
+
+}
+
+</script>
+
+<styletype="text/css">
+
+#c{
+
+background:white;
+
+}
+
+</style>
+
+</head>
+
+<bodystyle='background:black'>
+
+<!-- <div id="div1" data-trr="abc"></div> -->
+
+<canvasid="c"width="1000px"height="600px">你的浏览器不支持canvas</canvas>
+
+</body>
+
+</html>
+
+
+
+绘制弧线
+ arcTo(X1,Y1,X1,Y2，半径)
+   -- X1,Y1：第一个点坐标；起始点
+  -- X2,Y2：第二个点坐标；
+
+<script>
+
+window.onload=function(){
+
+varoc=document.getElementById('c');
+
+varocg=oc.getContext('2d');
+
+ocg.moveTo(100,200)
+
+ocg.arcTo(100,100,200,100,50)
+
+ocg.stroke();
+
+}
+
+</script>
+
+
+绘制贝赛尔曲线：
+
+方法1.quadraticCurveTo(dx,dy,x1,y1)
+       --dx,dy -->第一组控制点
+       --x1,y1-->第二组结束坐标
+
+window.onload=function(){
+
+var oc=document.getElementById('c');
+
+var ocg=oc.getContext('2d');
+
+ocg.moveTo(100,200);
+
+ocg.quadraticCurveTo(100,100,200,100);
+
+ocg.stroke();
+
+}
+
+</script>
+
+
+方法2.bezierCurveTo(dx1,dy1,dx2,dy2,x1,y1)
+           --dx1,dy1 -->第一组控制点
+      --dx2,dy2 -->第二组控制点
+       --x1,y1-->第三组结束坐标
+
+window.onload=function(){
+
+var oc=document.getElementById('c');
+
+var ocg=oc.getContext('2d');
+
+ocg.moveTo(100,200);
+
+ocg.bezierCurveTo(100,100,200,200,200,100);
+
+ocg.stroke();
+
+}
+
+</script>
+
+
+变换：
+1.translate(x,y)   -->偏移 ：从起始点为基准点，移动当前坐标位置,绘制在它后的图形才会偏移，前面的不会偏移
+
+
+var oc=document.getElementById('c');
+
+var ocg=oc.getContext('2d');
+
+ocg.translate(100,100);
+
+ocg.fillRect(0,0,100,100);
+
+
+
+1.rotate(角度*Math.PI/180)       -->旋转：参数为弧度-->以左上角为中心旋转
+
+var oc=document.getElementById('c');
+
+var ocg=oc.getContext('2d');
+
+ocg.translate(100,100);
+
+ocg.rotate(30*Math.PI/180)
+
+ocg.fillRect(0,0,100,100);
+
+
+
+1.scale(宽的缩放比例,高的缩放比例)       -->缩小放大 ：按原来的大小的倍数进行缩小和放大
+
+var oc=document.getElementById('c');
+
+var ocg=oc.getContext('2d');
+
+ocg.translate(100,100);
+
+ocg.rotate(30*Math.PI/180)
+
+ocg.scale(2,2)
+
+ocg.fillRect(0,0,100,100);
+
+
+
+旋转的小方块：
+
+<script>
+
+window.onload=function(){
+
+varoc=document.getElementById('c');
+
+varocg=oc.getContext('2d');
+
+varnum=0;
+
+setInterval(function(){
+
+num++;
+
+ocg.save();
+
+ocg.clearRect(0,0,oc.width,oc.height);
+
+ocg.translate(300,300);
+
+ocg.rotate(num*Math.PI/180);
+
+ocg.translate(-50,-50);
+
+ocg.fillRect(0,0,100,100);
+
+ocg.restore();
+
+},30)
+
+}
+
+</script>
+
+
+
+旋转的放大的小方块：
+
+
+<script>
+
+window.onload=function(){
+
+varoc=document.getElementById('c');
+
+varocg=oc.getContext('2d');
+
+varnum=0;
+
+varnum2=0;
+
+varvalue=1;
+
+
+setInterval(function(){
+
+num++;
+
+ocg.save();
+
+ocg.clearRect(0,0,oc.width,oc.height);
+
+ocg.translate(300,300);
+
+if(num2==100){
+
+value=-1
+
+}elseif(num2==0){
+
+value=1
+
+}
+
+num2+=value;
+
+ocg.scale(num2*1/50,num2*1/50)
+
+
+ocg.rotate(num*Math.PI/180);
+
+ocg.translate(-50,-50);
+
+ocg.fillRect(0,0,100,100);
+
+ocg.restore();
+
+},30)
+
+}
+
+</script>
+
+
+
+canvas ：画布：
+1.引入< canvas>< /canvas> 标签
+  canvas 在浏览器中默认是(宽300px,高150px)的大小，没添加样式是看不到的，在IE8以下的浏览器不兼容，
+  所以在标签里面填写“< canvas>"你的浏览器不兼容canvas"< /canvas>”
+
+canvas  画图步骤：
+
+1.建立画布-->在body中引入< canvas >< /canvas> 标签，画布的大小样式只能在行   间设置  示例：
+<canvas id="c" width="400px" height="400px">你的浏览器不支持canvas</canvas>
+     PS: 需要在样式中设置背景颜色，才可以看到canvas
+
+2. 在javascript标签中获取到canvas，再建立2D环境-->var ocg=oc.getContext('2d')。
+
+    示例：
+<script>
+windoad=function(){
+var oc=document.getElementById('c');
+var ocg=oc.getContext('2d')
+}
+</script>
+
+canvas 元素本身是没有绘图能力的。所有的绘制工作必须在 JavaScript 内部完成.
+
+1.用Canvas的2D环境中绘制带填充方框:方法:画布.fillRect(起始的X值，起始的Y值，宽度，高度)默认的填充颜色是黑色
+  示例：
+<script>
+windoad=function(){
+var oc=document.getElementById('c');
+var ocg=oc.getContext('2d')
+   ocg.fillRect(10,10,100,100); 
+}
+</script>
+
+2.用Canvas的2D环境中绘制带边框的方框:方法:画布.strokeRect(起始的X值，起始的Y值，宽度，高度)默认的边框颜色是黑色1px
+strokeRect() -->绘制矩形
+
+示例：
+<script>
+windoad=function(){
+var oc=document.getElementById('c');
+var ocg=oc.getContext('2d')
+   ocg.strokeRect(10,10,100,100); 
+}
+</script>
+
+设置绘图属性：
+1.fillStyle -->设置填充颜色
+2.strokeStyle -->设置边框颜色
+3..lineWidth -->设置边框宽度
+
+示例：
+<script>
+windoad=function(){
+var oc=document.getElementById('c');
+var ocg=oc.getContext('2d')
+  ocg.strokeStyle='blue'
+  ocg.lineWidth=10;
+  ocg.fillStyle='#000'
+  ocg.strokeRect(10.5,10.5,100,100); // 1.先绘制边框，后面的绘制的图形会覆盖前面的图形
+  ocg.fillRect(10,10,100,100);       //
+}
+</script>
+
+设置绘图边界：
+1.lineJoin -->设置边界连接点样式，值：
+       --miter(默认) ,  --round(圆角)  ,-- bevel(斜角)
+          示例：ocg.lineJoin='bevel'
+2.lineCap -->设置端点样式，值：(用于非封闭的图形：直线、半弧..)
+       --butt(默认) ,  --round(圆角)  ,-- square(高度多出为宽一半的值)
+
+
+设置绘制路径：
+1.beginPath() -->开始绘制路径(绘图开始)
+2.moveTo(x,y) -->移动到绘制的新目标点(起始点坐标)-->第一个点坐标
+3.lineTo(x,y) -->新目标点(终点坐标) -->第二个点坐标 / 第三.四.五个点坐标都用着个
+4.stroke() -->连线(绘制)画线  --也可以使用填充fill()
+5.closePath() -->结束绘制路径(绘图结束)-> 闭合图形(放在stroke()前面会把图形自动进行闭合)
+
+示例:
+<script>
+windoad=function(){
+var oc=document.getElementById('c');
+var ocg=oc.getContext('2d')
+   ocg.beginPath();
+   ocg.moveTo(100,100);
+   ocg.lineTo(200,200);
+   ocg.lineTo(300,200);
+   ocg.closePath();
+   ocg.stroke();  // 图形一 自动闭合
+       ocg.beginPath();
+       ocg.moveTo(100,200);
+       ocg.lineTo(200,300);
+       ocg.lineTo(300,300);
+       ocg.stroke();
+       ocg.closePath();// 图形二 不闭合   
+}
+</script>
+
+
+
+绘制路径2
+
+1.clearRect() -->删除一个画布的矩形区域
+  示例：  -- ocg.clearRect(0,0,oc.width,oc.height)  清除画布
+2.save() -->保存路径
+3.restore() -->恢复路径
+
+解析：save() 和restore() --》类似一对括号，两个里面的属性只对里面的图形有效果
+
+示例：
+ var oc=document.getElementById('c');
+   var ocg=oc.getContext('2d');
+       ocg.save() ;
+       ocg.fillStyle='blue'
+       ocg.beginPath();
+       ocg.moveTo(100,100);
+       ocg.lineTo(200,200);
+       ocg.lineTo(300,200); 
+       ocg.closePath()
+       ocg.fill(); 
+       ocg.restore();
+        ocg.beginPath();
+       ocg.moveTo(100,200);
+       ocg.lineTo(200,300);
+       ocg.lineTo(300,300); 
+       ocg.closePath()
+       ocg.fill(); 
+
+
+
+
+
+
+
+
+
+
+
